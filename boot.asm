@@ -1,5 +1,5 @@
 ; SPDX-License-Identifier: GPL-3.0-only
-; MullOS:0.1 - Early Bootstrap for x86_64
+; MullOS:0.1 - Early Bootstrap for x86 Target
 
 MULTIBOOT_MAGIC    equ 0x1BADB002
 MULTIBOOT_FLAGS    equ 0x00000003
@@ -14,7 +14,7 @@ align 4
 section .bss
 align 16
 stack_bottom:
-    resb 16384 ; Alokasi stack 16 KB
+    resb 16384 ; Allocate 16 KB kernel stack
 stack_top:
 
 section .text
@@ -28,3 +28,6 @@ _start:
 .hang:
     hlt
     jmp .hang
+
+; Versi Beta...
+; Bahasa Inggris Sih wkwk
