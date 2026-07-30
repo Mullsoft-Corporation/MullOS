@@ -3,7 +3,7 @@
  * Software Scrolling, Terminal Formatting, Hardware Cursor Movement, ANSI Color Escape Simulation.
  */
 
-#include "../include/kernel.h"
+#include "kernel.h"
 
 #define VGA_WIDTH 80
 #define VGA_HEIGHT 25
