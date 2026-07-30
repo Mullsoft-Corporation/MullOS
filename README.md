@@ -1,2 +1,2 @@
 # MullOS
-A Operating System
+<>
