@@ -1,33 +1,49 @@
-; SPDX-License-Identifier: GPL-3.0-only
-; MullOS:0.1 - Early Bootstrap for x86 Target
+; ==============================================================================
+; boot.asm - Entry point for MullOS (x86 32-bit)
+; ==============================================================================
 
-MULTIBOOT_MAGIC    equ 0x1BADB002
-MULTIBOOT_FLAGS    equ 0x00000003
-MULTIBOOT_CHECKSUM equ -(MULTIBOOT_MAGIC + MULTIBOOT_FLAGS)
+BITS 32
+
+; Multiboot constants
+MB_ALIGN     equ 1 << 0
+MB_MEMINFO   equ 1 << 1
+MB_FLAGS     equ MB_ALIGN | MB_MEMINFO
+MB_MAGIC     equ 0x1BADB002
+MB_CHECKSUM  equ -(MB_MAGIC + MB_FLAGS)
 
 section .multiboot
 align 4
-    dd MULTIBOOT_MAGIC
-    dd MULTIBOOT_FLAGS
-    dd MULTIBOOT_CHECKSUM
+    dd MB_MAGIC
+    dd MB_FLAGS
+    dd MB_CHECKSUM
 
 section .bss
 align 16
 stack_bottom:
-    resb 16384 ; Allocate 16 KB kernel stack
+    resb 16384                  ; 16 KB stack space
 stack_top:
 
 section .text
 global _start
-extern mullos_main
+extern kmain
 
 _start:
+    ; Setup stack
     mov esp, stack_top
-    call mullos_main
-    cli
-.hang:
-    hlt
-    jmp .hang
 
-; Versi Beta...
-; Bahasa Inggris Sih wkwk
+    ; Clear flags
+    push 0
+    popf
+
+    ; Pass multiboot parameters (EBX = info struct, EAX = magic)
+    push ebx
+    push eax
+
+    call kmain
+
+    ; If kmain returns, halt CPU
+    cli
+.loop:
+    hlt
+    jmp .loop
+; 67 Aku Nak Mie Ayam😋
